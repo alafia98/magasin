@@ -19,7 +19,7 @@ app.use(morgan('dev'))
 app.use('/api/v1/user', require("./routes/userRoutes"))
 
 // listen port
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8081;
 app.listen(port, () => {
     console.log(`Server Running in ${process.env.NODE_MODE} Node on port ${port}`.bgCyan.white);
 })

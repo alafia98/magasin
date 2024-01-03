@@ -1,6 +1,11 @@
 const userModel = require('../models/userModels')
+const societeModel = require('../models/societeModel')
+const typeMaterielModel = require('../models/typeMaterielModel')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const serviceModel = require('../models/serviceModel')
+const sourceAchatModel = require('../models/sourceachatModel')
+const materielModel = require('../models/materielModel')
 
 // register callback
 const registerController = async (req, res) => {
@@ -41,18 +46,80 @@ const loginController = async (req, res) => {
     }
 }
 
-// const authController = async (req, res) => {
-//     try {
-//         const user = await userModel.findOne({_id: req.body.userId})
-//         if(!user) {
-//             return res.status(200).send({message: 'User not found', success:false})
-//         } else {
-//             res.status(200).send({seccess:true, data:{name:user.name, email:user.email}})
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).send({message:'auth error', success:false, error})
-//     }
-// }
+const authController = async (req ,res) => {
+    try {
+        const user = await userModel.findById({_id: req.body.userId});
+        user.password = undefined;
+        if(!user) {
+            return res.status(200).send({message: "user not found", success:false})
+        } else {
+            res.status(200).send({success:true, data: {name:user.name, email:user.email}})
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({message:'auth error', success:false, error})
+    }
+}
 
-module.exports = {loginController, registerController};
+const getSocietesController = async (req, res) => {
+    try {
+       const societes = await societeModel.find({}) 
+       res.status(200).send({success:true, message:'societes data', data:societes})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching societes', error})
+    }
+}
+
+const getTypeMaterielsController = async (req, res) => {
+    try {
+       const typeMateriels = await typeMaterielModel.find({}) 
+       res.status(200).send({success:true, message:'type materiels data', data:typeMateriels})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching societes', error})
+    }
+}
+
+const getMaterielsController = async (req, res) => {
+    try {
+       const materiels = await materielModel.find({}) 
+       res.status(200).send({success:true, message:' materiels data', data:materiels})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching societes', error})
+    }
+}
+
+const getServicesController = async (req, res) => {
+    try {
+       const services = await serviceModel.find({}) 
+       res.status(200).send({success:true, message:'services data', data:services})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching services', error})
+    }
+}
+
+const getSourcesAchatController = async (req, res) => {
+    try {
+       const sourcesAchat = await sourceAchatModel.find({}) 
+       res.status(200).send({success:true, message:'sourcesAchat data', data:sourcesAchat})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching sourcesAchat', error})
+    }
+}
+
+// const getTypeMaterielController 
+
+module.exports = {
+    loginController, 
+    registerController, 
+    authController, 
+    getSocietesController,
+    getTypeMaterielsController,
+    getServicesController,
+    getSourcesAchatController,
+    getMaterielsController
+};

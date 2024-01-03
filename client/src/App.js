@@ -6,16 +6,12 @@ import Register from './pages/Register';
 import {useSelector} from "react-redux";
 import Spinner from './components/Spinner';
 import PublicRoute from './components/PublicRoute';
-import Societe from './pages/Societe';
-import Departement from './pages/Departement';
-import TypeMateriel from './pages/TypeMateriel';
-import Materiel from './pages/Materiel';
-import BonLivraison from './pages/BonLivraison';
-import Service from './pages/Service';
-import Provenance from './pages/Provenance';
-import TypeUnite from './pages/TypeUnite';
-import TypeEtat from './pages/TypeEtat';
 import ProtectedRoute from './components/ProtectedRoute';
+import Societes from './pages/Societes';
+import TypeMateriels from './pages/TypeMateriels';
+import Services from './pages/Services';
+import SourcesAchat from './pages/SourcesAchat';
+import Materiels from './pages/Materiels';
 
 function App() {
   const {loading} = useSelector(state => state.alerts)
@@ -39,53 +35,33 @@ function App() {
               <Register />
             </PublicRoute>
           } />
-          <Route path='/service' element={
+          <Route path='/typeMateriels' element={
             <ProtectedRoute>
-              <Service />
+              <TypeMateriels />
             </ProtectedRoute>
           } />
-          <Route path='/provenance' element={
+          <Route path='/materiels' element={
             <ProtectedRoute>
-              <Provenance />
+              <Materiels />
             </ProtectedRoute>
           } />
-          <Route path='/typeUnite' element={
+          <Route path='/societes' element={
             <ProtectedRoute>
-              <TypeUnite />
+              <Societes />
             </ProtectedRoute>
           } />
-          <Route path='/typeEtat' element={
+          <Route path='/services' element={
             <ProtectedRoute>
-              <TypeEtat />
+              <Services />
             </ProtectedRoute>
           } />
-          <Route path='/bonLivraison' element={
+          <Route path='/sourceAchat' element={
             <ProtectedRoute>
-              <BonLivraison />
+              <SourcesAchat />
             </ProtectedRoute>
           } />
-          <Route path='/societe' element={
-            <ProtectedRoute>
-              <Societe />
-            </ProtectedRoute>
-          } />
-          <Route path='/departement' element={
-            <ProtectedRoute>
-              <Departement />
-            </ProtectedRoute>
-          } />
-          <Route path='/typeMateriel' element={
-            <ProtectedRoute>
-              <TypeMateriel />
-            </ProtectedRoute>
-          } />
-          <Route path='/materiel' element={
-            <ProtectedRoute>
-              <Materiel />
-            </ProtectedRoute>
-          } />
-          
         </Routes>
+        
       )}
       </BrowserRouter>
     </>
