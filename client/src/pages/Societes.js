@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Layout from "../components/Layout"
-import {Table, message} from 'antd';
+import {Button, Table, message} from 'antd';
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 const Societes = () => {
     const [societes, setSocietes] = useState([])
@@ -43,9 +44,10 @@ const Societes = () => {
   return (
     <Layout>
         <h1 className="text-center" style={{paddingTop: '50px'}}>Les Sociétés</h1>
-        <Table columns={columns} dataSource={societes}>
-
-        </Table>
+        <Link to='/ajouterSociete'>
+            <Button type="primary">Ajouter nouvelle Société</Button>
+        </Link>
+        <Table columns={columns} dataSource={societes}></Table>
     </Layout>
   )
 }

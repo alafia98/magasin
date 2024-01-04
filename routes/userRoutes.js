@@ -6,7 +6,10 @@ const {loginController,
     getTypeMaterielsController,
     getServicesController,
     getSourcesAchatController,
-    getMaterielsController
+    getMaterielsController,
+    ajouterTypeMaterielController,
+    ajouterSocieteController,
+    ajouterServiceController
 } = require('../controllers/userCtrl')
 const authMiddleware = require("../middlewares/authMiddleware")
 
@@ -23,12 +26,19 @@ router.post('/register', registerController)
 // AUTH || POST
 router.post('/getUserData', authMiddleware, authController);
 
+router.post('/ajouterTypeMateriel', authMiddleware, ajouterTypeMaterielController)
+
+router.post('/ajouterSociete', authMiddleware, ajouterSocieteController)
+
+router.post('/ajouterService', authMiddleware, ajouterServiceController)
+
 // Societes
 router.get('/getSocietes', authMiddleware, getSocietesController);
 
 router.get('/getTypeMateriels', authMiddleware, getTypeMaterielsController);
 
 router.get('/getMateriels', authMiddleware, getMaterielsController);
+
 
 router.get('/getServices', authMiddleware, getServicesController);
 

@@ -12,6 +12,9 @@ import TypeMateriels from './pages/TypeMateriels';
 import Services from './pages/Services';
 import SourcesAchat from './pages/SourcesAchat';
 import Materiels from './pages/Materiels';
+import AjouterTypeMateriel from './pages/Ajout/AjouterTypeMateriel';
+import AjouterSociete from './pages/Ajout/AjouterSociete';
+import AjouterService from './pages/Ajout/AjouterService';
 
 function App() {
   const {loading} = useSelector(state => state.alerts)
@@ -45,6 +48,21 @@ function App() {
               <Materiels />
             </ProtectedRoute>
           } />
+          <Route path='/ajouterTypeMateriel' element={
+            <ProtectedRoute>
+              <AjouterTypeMateriel />
+            </ProtectedRoute>
+          } />
+          <Route path='/ajouterSociete' element={
+            <ProtectedRoute>
+              <AjouterSociete />
+            </ProtectedRoute>
+          } />
+          <Route path='/ajouterService' element={
+            <ProtectedRoute>
+              <AjouterService />
+            </ProtectedRoute>
+          } />
           <Route path='/societes' element={
             <ProtectedRoute>
               <Societes />
@@ -61,7 +79,6 @@ function App() {
             </ProtectedRoute>
           } />
         </Routes>
-        
       )}
       </BrowserRouter>
     </>

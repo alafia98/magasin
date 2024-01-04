@@ -6,7 +6,7 @@ import {message} from 'antd';
 import { useSelector } from 'react-redux';
 
 const Layout = ({children}) => {
-    const {user} = useSelector(state => state.user)
+    const {user} = useSelector((state) => state.user)
     const location = useLocation()
     const navigate = useNavigate()
 

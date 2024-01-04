@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
-import {Table, message } from 'antd'
+import {Button, Table, message } from 'antd'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const Services = () => {
     const [services, setServices] = useState([])
@@ -35,9 +36,10 @@ const Services = () => {
   return (
     <Layout>
         <h1 className="text-center" style={{paddingTop: '50px'}}>Les Services</h1>
-        <Table columns={columns} dataSource={services}>
-
-        </Table>
+        <Link to='/ajouterService'>
+            <Button type="primary">Ajouter nouvelle Société</Button>
+        </Link>
+        <Table columns={columns} dataSource={services}></Table>
     </Layout>
   )
 }

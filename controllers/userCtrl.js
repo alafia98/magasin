@@ -71,6 +71,28 @@ const getSocietesController = async (req, res) => {
     }
 }
 
+const ajouterSocieteController = async (req, res) => {
+    try {
+        const newSociete = await societeModel({...req.body})
+        await newSociete.save()
+        res.status(201).send({success:true, message: "Societe added successfully"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, error, message:"Error While Applying For Societe"})
+    }
+}
+
+const ajouterServiceController = async (req, res) => {
+    try {
+        const newService = await serviceModel({...req.body})
+        await newService.save()
+        res.status(201).send({success:true, message: "Service added successfully"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, error, message:"Error While Applying For Service"})
+    }
+}
+
 const getTypeMaterielsController = async (req, res) => {
     try {
        const typeMateriels = await typeMaterielModel.find({}) 
@@ -78,6 +100,17 @@ const getTypeMaterielsController = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send({success:false, message:'Error while fetching societes', error})
+    }
+}
+
+const ajouterTypeMaterielController = async (req, res) => {
+    try {
+        const newTypeMateriel = await typeMaterielModel({...req.body})
+        await newTypeMateriel.save()
+        res.status(201).send({success:true, message: "Type materiel added successfully"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
     }
 }
 
@@ -113,13 +146,7 @@ const getSourcesAchatController = async (req, res) => {
 
 // const getTypeMaterielController 
 
-module.exports = {
-    loginController, 
-    registerController, 
-    authController, 
-    getSocietesController,
-    getTypeMaterielsController,
-    getServicesController,
-    getSourcesAchatController,
-    getMaterielsController
+module.exports = { loginController, registerController, authController, getSocietesController,
+    getTypeMaterielsController, ajouterTypeMaterielController, getServicesController, getSourcesAchatController,
+    getMaterielsController,ajouterSocieteController, ajouterServiceController
 };

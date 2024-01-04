@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import Layout from '../components/Layout'
-import {Table, message } from 'antd'
+import {Button, Table, message } from 'antd'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const TypeMateriels = () => {
     const [typeMateriels, setTypeMateriels] = useState([])
@@ -35,9 +36,10 @@ const TypeMateriels = () => {
   return (
     <Layout>
         <h1 className="text-center" style={{paddingTop: '50px'}}>Les Types des Matériels</h1>
-        <Table columns={columns} dataSource={typeMateriels}>
-
-        </Table>
+        <Link to='/ajouterTypeMateriel'>
+            <Button type="primary">Ajouter nouvelle Type de Matériel</Button>
+        </Link>
+        <Table columns={columns} dataSource={typeMateriels}></Table>
     </Layout>
   )
 }
