@@ -50,7 +50,7 @@ const Materiels = () => {
 
         } catch (error) {
             console.log(error);
-            message.error('Something went wrong in getting  materiel')
+            message.error('Something ent wrong in getting  materiel')
         }
     }
     useEffect(() => {
@@ -150,7 +150,7 @@ const Materiels = () => {
                     {materiels.map((materiel) => (
                         <tr key={materiel._id}>
                             <td>{materiel.nomMateriel}</td>
-                            <td>{materiel.typeMateriel?.nomTypeMateriel}</td>
+                            <td>{materiel.typeMateriel}</td>
                             <td>{materiel.unite}</td>
                             <td>{materiel.model}</td>
                             <td>{materiel.serie}</td>

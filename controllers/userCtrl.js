@@ -7,6 +7,7 @@ const sourceAchatModel = require('../models/sourceachatModel')
 const materielModel = require('../models/materielModel')
 const typeMaterielModel = require('../models/typematerielModel')
 const slugify = require('slugify')
+const bonLivraisonModel = require('../models/bonLivraisonModel')
 
 // register callback
 const registerController = async (req, res) => {
@@ -124,6 +125,36 @@ const ajouterMaterielController = async (req, res) => {
 
 }
 
+// bon livraison
+const getBonLivraisonController = async (req, res) => {
+    try {
+       const bonLivraison = await bonLivraisonModel.find({}).sort({createdAt:-1})
+       res.status(200).send({success:true, message:' bon livraison data', bonLivraison})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching bon livraison', error})
+    }
+}
+const ajouterBonLivraisonController = async (req, res) => {
+    try {
+        const { article, unite, quantite } = req.body;
+        switch (true) {
+            case !article:
+                return res.status(500).send({ error: 'Article is required' });
+            case !unite:
+                return res.status(500).send({ error: 'Unité is required' });
+            case !quantite:
+                return res.status(500).send({err: 'Quantité is required'})
+        }
+        const bonLivraison = new bonLivraisonModel({...req.body});
+        await bonLivraison.save();
+        res.status(201).send({ success: true, message: 'bon livraison Created Successfully', bonLivraison });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, error, message: 'Error in Creating Materiel' });
+    }
+
+}
     // try {
     //     const {nomTypeMateriel} = req.body
     //     if(!nomTypeMateriel) return res.status(401).send({message:'Nom de type est obligatoire'})
@@ -192,5 +223,6 @@ const getSourcesAchatController = async (req, res) => {
 
 module.exports = { loginController, registerController, authController, getSocietesController,
     getTypeMaterielsController, ajouterTypeMaterielController, getServicesController, getSourcesAchatController,
-    getMaterielsController,ajouterSocieteController, ajouterServiceController, ajouterMaterielController
+    getMaterielsController,ajouterSocieteController, ajouterServiceController, ajouterMaterielController,
+    getBonLivraisonController, ajouterBonLivraisonController,
 };
