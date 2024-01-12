@@ -43,9 +43,18 @@ const Layout = ({children}) => {
                 </div>
                 <div className='content'>
                     <div className='header'>
-                        <div className="header-content">
-                            <Link to='/profile'>{user?.name}</Link>
-                        </div>
+                        <ul className="header-content" >
+                            <li><Link to='/bonlivraison'>Bon Livraison</Link></li>
+                            <li><Link to='/boncommande'>Bon Commande</Link></li>
+                            <li><Link to='/maincourante'>Main Courante</Link></li>
+                            <li><Link to='/inventaire'>Inventaire</Link>
+                                <ul style={{width:"20vw"}}>
+                                    <li ><Link to='/inventaire/medical'>Materiel Médical et Médico-Technique</Link></li>
+                                    <li ><Link to='/inventaire/technique'>Matériel Technique et Mobilier be Bureau</Link></li>
+                                </ul>
+                            </li>
+                            <li><Link to='/profile'>{user?.name}</Link></li>
+                        </ul>
                     </div>
                     <div className='body'>{children}</div>
                 </div>

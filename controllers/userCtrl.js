@@ -1,11 +1,12 @@
 const userModel = require('../models/userModels')
 const societeModel = require('../models/societeModel')
-const typeMaterielModel = require('../models/typeMaterielModel')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const serviceModel = require('../models/serviceModel')
 const sourceAchatModel = require('../models/sourceachatModel')
 const materielModel = require('../models/materielModel')
+const typeMaterielModel = require('../models/typematerielModel')
+const slugify = require('slugify')
 
 // register callback
 const registerController = async (req, res) => {
@@ -26,7 +27,6 @@ const registerController = async (req, res) => {
         res.status(500).send({success:false, message:`Register Controller ${error.message}`})
     }
 }
-
 // login callback
 const loginController = async (req, res) => {
     try {
@@ -45,7 +45,6 @@ const loginController = async (req, res) => {
         res.status(500).send({message:`Error in Login CTRL ${error.message}`})
     }
 }
-
 const authController = async (req ,res) => {
     try {
         const user = await userModel.findById({_id: req.body.userId});
@@ -60,7 +59,85 @@ const authController = async (req ,res) => {
         res.status(500).send({message:'auth error', success:false, error})
     }
 }
+// type materiel
+const getTypeMaterielsController = async (req, res) => {
+    try {
+        const typeMateriels = await typeMaterielModel.find({}).sort({createdAt:-1}) 
+        res.status(200).send({success:true, message:'type materiels data', typeMateriels})
+     } catch (error) {
+         console.log(error);
+         res.status(500).send({success:false, message:'Error while fetching societes', error})
+     }
+}
+const ajouterTypeMaterielController = async (req, res) => {
+    try {
+        const {nomTypeMateriel} = req.body
+        if(!nomTypeMateriel) return res.status(401).send({message:'Nom de type est obligatoire'})
+        const existingTypeMateriel = await typeMaterielModel.findOne({nomTypeMateriel})
+        if(existingTypeMateriel) {
+            return res.status(200).send({success:true, message:'Type Materiel Already Exist'})
+        }
+        const typeMateriel = await typeMaterielModel({nomTypeMateriel, slug:slugify(nomTypeMateriel)})
+        await typeMateriel.save()
+        res.status(201).send({success:true, message: "Type materiel added successfully"})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
+    }
+    // try {
+    //     const newTypeMateriel = await typeMaterielModel({...req.body})
+    //     await newTypeMateriel.save()
+    //     res.status(201).send({success:true, message: "Type materiel added successfully"})
+    // } catch (error) {
+    //     console.log(error);
+    //     res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
+    // }
+}
+// materiel
+const getMaterielsController = async (req, res) => {
+    try {
+       const materiels = await materielModel.find({}).sort({createdAt:-1})
+       res.status(200).send({success:true, message:' materiels data', materiels})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching materiels', error})
+    }
+}
+const ajouterMaterielController = async (req, res) => {
+        try {
+            const { nomMateriel, typeMateriel } = req.body;
+            switch (true) {
+                case !nomMateriel:
+                    return res.status(500).send({ error: 'Nom matériel is required' });
+                case !typeMateriel:
+                    return res.status(500).send({ error: 'Type matériel is required' });
+            }
+            const typeMaterielObj = await typeMaterielModel.findById(typeMateriel)
+            const nomTypeMateriel = typeMaterielObj ? typeMaterielObj.nomTypeMateriel : null;
+            const materiels = new materielModel({...req.body,slug: slugify(nomMateriel),nomTypeMateriel: nomTypeMateriel,});
+            await materiels.save();
+            res.status(201).send({ success: true, message: 'Materiel Created Successfully', materiels });
+        } catch (error) {
+            console.log(error);
+            res.status(500).send({ success: false, error, message: 'Error in Creating Materiel' });
+        }
 
+}
+
+    // try {
+    //     const {nomTypeMateriel} = req.body
+    //     if(!nomTypeMateriel) return res.status(401).send({message:'Nom de type est obligatoire'})
+    //     const existingTypeMateriel = await typeMaterielModel.findOne({nomTypeMateriel})
+    //     if(existingTypeMateriel) {
+    //         return res.status(200).send({success:true, message:'Type Materiel Already Exist'})
+    //     }
+    //     const typeMateriel = await typeMaterielModel({nomTypeMateriel, slug:slugify(nomTypeMateriel)})
+    //     await typeMateriel.save()
+    //     res.status(201).send({success:true, message: "Type materiel added successfully"})
+    // } catch (error) {
+    //     console.log(error);
+    //     res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
+    // }
 const getSocietesController = async (req, res) => {
     try {
        const societes = await societeModel.find({}) 
@@ -93,37 +170,6 @@ const ajouterServiceController = async (req, res) => {
     }
 }
 
-const getTypeMaterielsController = async (req, res) => {
-    try {
-       const typeMateriels = await typeMaterielModel.find({}) 
-       res.status(200).send({success:true, message:'type materiels data', data:typeMateriels})
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({success:false, message:'Error while fetching societes', error})
-    }
-}
-
-const ajouterTypeMaterielController = async (req, res) => {
-    try {
-        const newTypeMateriel = await typeMaterielModel({...req.body})
-        await newTypeMateriel.save()
-        res.status(201).send({success:true, message: "Type materiel added successfully"})
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
-    }
-}
-
-const getMaterielsController = async (req, res) => {
-    try {
-       const materiels = await materielModel.find({}) 
-       res.status(200).send({success:true, message:' materiels data', data:materiels})
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({success:false, message:'Error while fetching societes', error})
-    }
-}
-
 const getServicesController = async (req, res) => {
     try {
        const services = await serviceModel.find({}) 
@@ -144,9 +190,7 @@ const getSourcesAchatController = async (req, res) => {
     }
 }
 
-// const getTypeMaterielController 
-
 module.exports = { loginController, registerController, authController, getSocietesController,
     getTypeMaterielsController, ajouterTypeMaterielController, getServicesController, getSourcesAchatController,
-    getMaterielsController,ajouterSocieteController, ajouterServiceController
+    getMaterielsController,ajouterSocieteController, ajouterServiceController, ajouterMaterielController
 };

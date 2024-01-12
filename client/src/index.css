@@ -21,5 +21,29 @@
 
  .header-content {
    display: flex;
-   flex-direction: row-reverse;
+   justify-content: space-between;
+   list-style: none;
+ }
+
+ .header-content > li {
+   position: relative;
+ }
+ 
+ .header-content ul {
+   display: none;
+   position: absolute;
+   top: 100%;
+   left: 0;
+   list-style: none;
+   padding: 0;
+   background-color: #fff;
+   border: 1px solid #ddd;
+ }
+
+ .header-content ul li {
+   padding: 10px;
+ }
+ 
+ .header-content li:hover > ul {
+   display: block;
  }

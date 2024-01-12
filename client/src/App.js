@@ -10,11 +10,12 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Societes from './pages/Societes';
 import TypeMateriels from './pages/TypeMateriels';
 import Services from './pages/Services';
-import SourcesAchat from './pages/SourcesAchat';
 import Materiels from './pages/Materiels';
 import AjouterTypeMateriel from './pages/Ajout/AjouterTypeMateriel';
 import AjouterSociete from './pages/Ajout/AjouterSociete';
 import AjouterService from './pages/Ajout/AjouterService';
+import MainCourante from './pages/MainCourante';
+import BonLivraison from './pages/BonLivraison';
 
 function App() {
   const {loading} = useSelector(state => state.alerts)
@@ -73,9 +74,16 @@ function App() {
               <Services />
             </ProtectedRoute>
           } />
-          <Route path='/sourceAchat' element={
+
+          <Route path='/bonlivraison' element={
             <ProtectedRoute>
-              <SourcesAchat />
+              <BonLivraison />
+            </ProtectedRoute>
+          } />
+
+          <Route path='/maincourante' element={
+            <ProtectedRoute>
+              <MainCourante />
             </ProtectedRoute>
           } />
         </Routes>

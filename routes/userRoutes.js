@@ -1,47 +1,36 @@
 const express = require('express')
-const {loginController, 
-    registerController, 
-    authController,
-    getSocietesController,
-    getTypeMaterielsController,
-    getServicesController,
-    getSourcesAchatController,
-    getMaterielsController,
-    ajouterTypeMaterielController,
-    ajouterSocieteController,
-    ajouterServiceController
+const {loginController, registerController, authController, getSocietesController,
+    getTypeMaterielsController, getServicesController, getSourcesAchatController,
+    getMaterielsController, ajouterTypeMaterielController, ajouterSocieteController,
+    ajouterServiceController,ajouterMaterielController
 } = require('../controllers/userCtrl')
 const authMiddleware = require("../middlewares/authMiddleware")
-
 // router project
 const router = express.Router()
-
-// routes
-// LOGIN || POST
+// LOGIN 
 router.post('/login', loginController)
-
-// REGISTER || POST
+// REGISTER 
 router.post('/register', registerController)
-
-// AUTH || POST
+// AUTH 
 router.post('/getUserData', authMiddleware, authController);
 
-router.post('/ajouterTypeMateriel', authMiddleware, ajouterTypeMaterielController)
+// Type Materiel
+router.get('/getTypeMateriels', authMiddleware, getTypeMaterielsController);
+router.post('/ajouterTypeMateriel', authMiddleware, ajouterTypeMaterielController);
+// router.put('/modifierTypeMateriel/:id', authMiddleware, modifierTypeMaterielController);
 
-router.post('/ajouterSociete', authMiddleware, ajouterSocieteController)
+// Materiel
+router.get('/getMateriels', authMiddleware, getMaterielsController);
+router.post('/ajouterMateriel', authMiddleware, ajouterMaterielController);
+// router.put('/modifierMateriel/:id', authMiddleware, modifierMaterielController);
 
+// Service
+router.get('/getServices', authMiddleware, getServicesController);
 router.post('/ajouterService', authMiddleware, ajouterServiceController)
+// router.put('/modifierService/:id', authMiddleware, modifierServiceController)
 
 // Societes
 router.get('/getSocietes', authMiddleware, getSocietesController);
-
-router.get('/getTypeMateriels', authMiddleware, getTypeMaterielsController);
-
-router.get('/getMateriels', authMiddleware, getMaterielsController);
-
-
-router.get('/getServices', authMiddleware, getServicesController);
-
-router.get('/getSourceAchat', authMiddleware, getSourcesAchatController);
+router.post('/ajouterSociete', authMiddleware, ajouterSocieteController)
 
 module.exports = router;

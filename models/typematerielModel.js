@@ -1,9 +1,8 @@
 const mongoose = require('mongoose')
 
 const typeMaterielSchema = new mongoose.Schema({
-    typeMaterielId: {type:String, required:true},
-    nomTypeMateriel: {type:String, required:true},
-    
+    nomTypeMateriel: {type:String, required:true, unique:true},
+    slug: {type:String, lowercase:true}
 }, {timestamps: true})
 
 const typeMaterielModel = mongoose.model('typeMateriels', typeMaterielSchema)
