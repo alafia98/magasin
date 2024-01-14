@@ -8,6 +8,7 @@ const materielModel = require('../models/materielModel')
 const typeMaterielModel = require('../models/typematerielModel')
 const slugify = require('slugify')
 const bonLivraisonModel = require('../models/bonLivraisonModel')
+const mainCouranteModel = require('../models/maincouranteModel')
 
 // register callback
 const registerController = async (req, res) => {
@@ -125,11 +126,12 @@ const ajouterMaterielController = async (req, res) => {
 
 }
 
+
 // bon livraison
-const getBonLivraisonController = async (req, res) => {
+const getBonLivraisonsController = async (req, res) => {
     try {
-       const bonLivraison = await bonLivraisonModel.find({}).sort({createdAt:-1})
-       res.status(200).send({success:true, message:' bon livraison data', bonLivraison})
+       const bonLivraisons = await bonLivraisonModel.find({}).sort({createdAt:-1})
+       res.status(200).send({success:true, message:' bon livraison data', bonLivraisons})
     } catch (error) {
         console.log(error);
         res.status(500).send({success:false, message:'Error while fetching bon livraison', error})
@@ -137,38 +139,75 @@ const getBonLivraisonController = async (req, res) => {
 }
 const ajouterBonLivraisonController = async (req, res) => {
     try {
-        const { article, unite, quantite } = req.body;
+        const { materiel, unite, quantite, dateEntree } = req.body;
         switch (true) {
-            case !article:
+            case !materiel:
                 return res.status(500).send({ error: 'Article is required' });
             case !unite:
                 return res.status(500).send({ error: 'Unité is required' });
             case !quantite:
                 return res.status(500).send({err: 'Quantité is required'})
+            case !dateEntree:
+                return res.status(500).send({err: 'date entré is required'})
         }
-        const bonLivraison = new bonLivraisonModel({...req.body});
-        await bonLivraison.save();
-        res.status(201).send({ success: true, message: 'bon livraison Created Successfully', bonLivraison });
+        const materielObj = await materielModel.findById(materiel)
+        const nomMateriel = materielObj ? materielObj.nomMateriel : null;
+        const bonLivraisons = new bonLivraisonModel({...req.body, nomMateriel:nomMateriel});
+        await bonLivraisons.save();
+        res.status(201).send({ success: true, message: 'bon livraison Created Successfully', bonLivraisons });
     } catch (error) {
         console.log(error);
         res.status(500).send({ success: false, error, message: 'Error in Creating Materiel' });
     }
-
 }
-    // try {
-    //     const {nomTypeMateriel} = req.body
-    //     if(!nomTypeMateriel) return res.status(401).send({message:'Nom de type est obligatoire'})
-    //     const existingTypeMateriel = await typeMaterielModel.findOne({nomTypeMateriel})
-    //     if(existingTypeMateriel) {
-    //         return res.status(200).send({success:true, message:'Type Materiel Already Exist'})
-    //     }
-    //     const typeMateriel = await typeMaterielModel({nomTypeMateriel, slug:slugify(nomTypeMateriel)})
-    //     await typeMateriel.save()
-    //     res.status(201).send({success:true, message: "Type materiel added successfully"})
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
-    // }
+
+// bon commande
+const getBonCommandesController = async (req, res) => {
+    try {
+       const bonCommandes = await bonLivraisonModel.find({}).sort({createdAt:-1})
+       res.status(200).send({success:true, message:' bon livraison data', bonCommandes})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching bon livraison', error})
+    }
+}
+const ajouterBonCommandeController = async (req, res) => {
+    try {
+        const { materiel, unite, quantite, dateEntree } = req.body;
+        switch (true) {
+            case !materiel:
+                return res.status(500).send({ error: 'Article is required' });
+            case !unite:
+                return res.status(500).send({ error: 'Unité is required' });
+            case !quantite:
+                return res.status(500).send({err: 'Quantité is required'})
+            case !dateEntree:
+                return res.status(500).send({err: 'date entré is required'})
+        }
+        const materielObj = await materielModel.findById(materiel)
+        const nomMateriel = materielObj ? materielObj.nomMateriel : null;
+        const bonCommandes = new bonLivraisonModel({...req.body, nomMateriel:nomMateriel});
+        await bonCommandes.save();
+        res.status(201).send({ success: true, message: 'bon livraison Created Successfully', bonLivraisons });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, error, message: 'Error in Creating Materiel' });
+    }
+}
+
+// main courante
+const getMainCouranteController = async (req, res) => {
+    try {
+       const mainCourante = await mainCouranteModel.find({}).sort({createdAt:-1})
+       res.status(200).send({success:true, message:' main courante data', mainCourante})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching main courante', error})
+    }
+}
+
+
+
 const getSocietesController = async (req, res) => {
     try {
        const societes = await societeModel.find({}) 
@@ -223,6 +262,7 @@ const getSourcesAchatController = async (req, res) => {
 
 module.exports = { loginController, registerController, authController, getSocietesController,
     getTypeMaterielsController, ajouterTypeMaterielController, getServicesController, getSourcesAchatController,
-    getMaterielsController,ajouterSocieteController, ajouterServiceController, ajouterMaterielController,
-    getBonLivraisonController, ajouterBonLivraisonController,
+    getMaterielsController,ajouterSocieteController, ajouterServiceController, ajouterMaterielController, 
+    ajouterBonLivraisonController, getMainCouranteController, getBonLivraisonsController,
+    getBonCommandesController, ajouterBonCommandeController
 };

@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const materielSchema = new mongoose.Schema({
     nomMateriel: {type:String, required:true, unique:true},
     slug: {type:String, lowercase:true},
-    typeMateriel: {type: Schema.Types.ObjectId, ref:"typeMateriels", required:true},
+    typeMateriel: {type:String, lowercase:true},
     unite: {type:String},
     model: {type:String},
     serie: {type:String},

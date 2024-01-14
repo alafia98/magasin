@@ -1,9 +1,10 @@
 const express = require('express')
 const {loginController, registerController, authController, getSocietesController,
-    getTypeMaterielsController, getServicesController, getSourcesAchatController,
+    getTypeMaterielsController, getServicesController,
     getMaterielsController, ajouterTypeMaterielController, ajouterSocieteController,
-    ajouterServiceController,ajouterMaterielController, getBonLivraisonController,
-    ajouterBonLivraisonController,
+    ajouterServiceController,ajouterMaterielController, getBonLivraisonsController,
+    ajouterBonLivraisonController,getBonCommandesController, ajouterBonCommandeController,
+    
 } = require('../controllers/userCtrl')
 const authMiddleware = require("../middlewares/authMiddleware")
 // router project
@@ -25,9 +26,14 @@ router.get('/getMateriels', authMiddleware, getMaterielsController);
 router.post('/ajouterMateriel', authMiddleware, ajouterMaterielController);
 // router.put('/modifierMateriel/:id', authMiddleware, modifierMaterielController);
 
+
 // bon livraison
-router.get('/getBonLivraison', authMiddleware, getBonLivraisonController);
+router.get('/getBonLivraisons', authMiddleware, getBonLivraisonsController);
 router.post('/ajouterBonLivraison', authMiddleware, ajouterBonLivraisonController);
+
+// bon commande
+router.get('/getBonCommandes', authMiddleware, getBonCommandesController);
+router.post('/ajouterBonCommande', authMiddleware, ajouterBonCommandeController);
 
 // Service
 router.get('/getServices', authMiddleware, getServicesController);

@@ -16,6 +16,7 @@ import AjouterSociete from './pages/Ajout/AjouterSociete';
 import AjouterService from './pages/Ajout/AjouterService';
 import MainCourante from './pages/MainCourante';
 import BonLivraison from './pages/BonLivraison';
+import BonCommande from './pages/BonCommande';
 
 function App() {
   const {loading} = useSelector(state => state.alerts)
@@ -78,6 +79,12 @@ function App() {
           <Route path='/bonlivraison' element={
             <ProtectedRoute>
               <BonLivraison />
+            </ProtectedRoute>
+          } />
+
+          <Route path='/bonCommande' element={
+            <ProtectedRoute>
+              <BonCommande />
             </ProtectedRoute>
           } />
 

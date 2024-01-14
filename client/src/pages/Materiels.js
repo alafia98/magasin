@@ -104,12 +104,12 @@ const Materiels = () => {
             </div>
             <Select placeholder="Selectionner un type" size="large"
             showSearch className="form-select mb-3" onChange={(value) => {setTypeMateriel(value)}}>
-                {typeMateriels?.map((type) => (
-                    <Option key={type._id} value={type._id}>{type.nomTypeMateriel}</Option>
+                {typeMateriels?.map((typeMateriel) => (
+                    <Option key={typeMateriel._id} value={typeMateriel._id}>{typeMateriel.nomTypeMateriel}</Option>
                 ))}
             </Select>
             <Select placeholder="Selectionner une unitée" size="large"
-            showSearch className="form-select mb-3" onChange={(value) => {setUnite(value)}}>
+                showSearch className="form-select mb-3" onChange={(value) => {setUnite(value)}}>
                 <Option value="Unité">Unité</Option>
                 <Option value="Litre">Litre</Option>
                 <Option value="Sachet">Sachet</Option>

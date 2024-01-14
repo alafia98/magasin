@@ -3,8 +3,8 @@ const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const bonLivraisonSchema = new mongoose.Schema({
     code: {type:Number, unique:true},
-    date: {type: Date, default: Date.now},
-    article: {type: String,required: true,},
+    dateEntree: {type: Date, required:true},
+    materiel: {type: String, lowercase:true},
     unite: {type: String,required: true,},
     prixUnitaire: {type: Number},
     quantite: {type: Number,required: true,},
@@ -12,5 +12,5 @@ const bonLivraisonSchema = new mongoose.Schema({
 })
 
 bonLivraisonSchema.plugin(AutoIncrement, {inc_field:'code'})
-const BonLivraison = mongoose.model('bonLivraison', bonLivraisonSchema)
-module.exports = BonLivraison
+const BonLivraisonModel = mongoose.model('bonLivraisons', bonLivraisonSchema)
+module.exports = BonLivraisonModel

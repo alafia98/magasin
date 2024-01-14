@@ -1,9 +1,16 @@
 const mongoose = require('mongoose')
+// const AutoIncrement = require('mongoose-sequence')(mongoose)
 
-const maincouranteSchema = new mongoose.Schema({
-    entre: {type:date},
-    sortie: {type:date},
+const mainCouranteSchema = new mongoose.Schema({
+    article:{type:String},
+    observation:{type:String},
+    date: {type:Date, default: Date.now},
+    entree:{type:Number},
+    sortie:{type:Number},
+    stock:{type:Number},
+
 }, {timestamps: true})
 
-const maincouranteModel = mongoose.model('maincourante', maincouranteSchema)
-module.exports = maincouranteModel
+// mainCouranteSchema.plugin(AutoIncrement, {inc_field:'code'})
+const mainCouranteModel = mongoose.model('mainCourante', mainCouranteSchema)
+module.exports = mainCouranteModel

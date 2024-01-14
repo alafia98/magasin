@@ -1,71 +1,90 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Layout from './../components/Layout';
-import { Select } from 'antd';
+import { Select, message } from 'antd';
+import axios from 'axios';
+import { format } from 'date-fns';
 const {Option} = Select
+
 const MainCourante = () => {
+    const [bonLivraisons, setBonLivraisons] = useState([])
+    const [bonLivraison, setBonLivraison] = useState('')
+    const [entries, setEntries] = useState([])
+    const fetchBonLivraisons = async () => {
+        try {
+            const {data} = await axios.get('/api/v1/user/getBonLivraisons', {
+                headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
+            })
+            if(data?.success) {
+                setBonLivraisons(data.bonLivraisons)
+            }
+        } catch (error) {
+            console.log(error);
+            message.error('Something went wrong in getting type materiel')
+        }
+      };
+    
+      const handleSearch = () => {
+        const selectedBonLivraison = bonLivraisons.find((livraison) => livraison._id === bonLivraison)
+        if(selectedBonLivraison) {
+            setEntries([{
+                materiel : selectedBonLivraison.materiel,
+                prixUnitaire : selectedBonLivraison.prixUnitaire,
+                dateEntree :  selectedBonLivraison.dateEntree,
+                quantite : selectedBonLivraison.quantite,
+            }])
+        } else {
+            setEntries([])
+        }
+      };
+        useEffect(() => {
+            fetchBonLivraisons();
+        }, []);
     
   return (
     <Layout>
         <h1 className="text-center" style={{paddingTop: '50px'}}>Main Courante</h1>
-        <form style={{display:"flex", justifyContent:'space-evenly'}}>
-            <Select style={{width:200}} showSearch>
-                {/* selectionner option a partir de tableau dans mongoose */}
+        <form style={{display:"flex", justifyContent:'space-evenly'}} onSubmit={(e) => {e.preventDefault(); handleSearch();}}>
+            <Select placeholder="Selectionner un type" size="large" showSearch 
+                onChange={(value) => {setBonLivraison(value)}}>
+                {bonLivraisons?.map((bonLivraison) => (
+                    <Option key={bonLivraison._id} value={bonLivraison._id}>{bonLivraison.materiel}</Option>
+                ))}
             </Select>
             <button type="submit" className="btn btn-success">Chercher</button>
         </form>
-        {/* <h2 className="text-center" style={{paddingTop: '50px'}}>{afficher le nom a partir d'option}</h2> */}
-        <table className="table table-striped" style={{border:"2px solid"}}>
+        {entries.length>0 && (
+        <div className="text-center" style={{ paddingTop: '20px' }}>
+          <h2>{entries[0].materiel}</h2>
+            <table className="table table-striped" style={{border:"2px solid"}}>
                 <thead>
                     <tr>
                         <th scope="col" rowspan="2">Observation</th>
                         <th scope="col" rowspan="2">Date</th>
-                        <th scope="col" colspan="2">Janvier</th>
-                        <th scope="col" colspan="2">Février</th>
-                        <th scope="col" colspan="2">Mars</th>
-                        <th scope="col" colspan="2">Avril</th>
-                        <th scope="col" colspan="2">Mai</th>
-                        <th scope="col" colspan="2">Juin</th>
-                        <th scope="col" colspan="2">Juillet</th>
-                        <th scope="col" colspan="2">Aout</th>
-                        <th scope="col" colspan="2">Séptembre</th>
-                        <th scope="col" colspan="2">Octobre</th>
-                        <th scope="col" colspan="2">Novembre</th>
-                        <th scope="col" colspan="2">Décembre</th>
+                        {Array.from({ length: 12 }, (_, index) => (
+                            <React.Fragment key={index}>
+                                <th scope="col" colSpan="2">
+                                    {new Intl.DateTimeFormat('fr', { month: 'long' }).format(new Date(2024, index, 1))}
+                                </th>
+                            </React.Fragment>
+                        ))}
                     </tr>
                     <tr>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
-                        <th>Entrées</th>
-                        <th>Sorties</th>
+                        {Array.from({ length: 12 }, (_, index) => (
+                        <React.Fragment key={index}>
+                            <th>Entrées</th>
+                            <th>Sorties</th>
+                        </React.Fragment>
+                        ))}
                     </tr>
                 </thead>
                 <tbody>
-                    {Array.from({length:31}, (_, index) => (
-                        <tr key={index+1}>
-                            <td></td>
-                            <td>{index+1}</td>
-                        </tr>
-                    ))}
+                   {entries.map((entry, index) => (
+                    <tr key={index}>
+                        <td></td>
+                        <td>{format(new Date(entry.dateEntree), 'dd/MM/yyyy')}</td>
+                        <td>{entry.quantite}</td>
+                    </tr>
+                   ))}
                 </tbody>
                 <tfooter>
                     <tr>
@@ -74,7 +93,7 @@ const MainCourante = () => {
                     </tr>
                     <tr>
                         <td colspan="2">Prix de l'Unité</td>
-                        <td></td>
+                        <td>{entries[0].prixUnitaire}</td>
                     </tr>
                     <tr>
                         <td colspan="2">Décompte</td>
@@ -98,7 +117,8 @@ const MainCourante = () => {
                     </tr>
                 </tfooter>
             </table>
-
+        </div>
+      )}
     </Layout>
   )
 }

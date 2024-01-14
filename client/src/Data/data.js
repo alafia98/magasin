@@ -27,11 +27,6 @@ export const AdminMenu = [
         icon: 'fa-solid fa-user'
     },
     {
-        name: 'SourcesAchat',
-        path: '/sourcesAchat',
-        icon: 'fa-solid fa-user'
-    },
-    {
         name: "Imprimer",
         path: '/imprimer',
         icon: 'fa-solid fa-user'

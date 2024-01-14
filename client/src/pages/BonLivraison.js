@@ -3,25 +3,38 @@ import Layout from './../components/Layout';
 import { Select, message } from 'antd';
 import axios from 'axios';
 import { format } from 'date-fns';
-// import BonLivraisonController from '../../../controllers/bonLivraisonController';
 const {Option} = Select;
 
-const BonLivraison = () => {
-  const [bonLivraison, setBonLivraison] = useState([])
-    const [article, setArticle] = useState("")
-    const [date, setDate] = useState("")
-    const [unite, setUnite] = useState('');
-    const [prixUnitaire, setPrixUnitaire] = useState('');
-    const [quantite, setQuantite] = useState('');
-    const [prixTotal, setPrixTotal] = useState(''); 
+const BonLivraisons = () => {
+  const [materiels, setMateriels] = useState([])
+  const [bonLivraisons, setBonLivraisons] = useState([])
+  const [dateEntree, setDateEntree] = useState("")
+  const [materiel, setMateriel] = useState("")
+  const [unite, setUnite] = useState('');
+  const [prixUnitaire, setPrixUnitaire] = useState('');
+  const [quantite, setQuantite] = useState('');
+  const [prixTotal, setPrixTotal] = useState(''); 
 
-    const getAllLivraisons = async () => {
+    const getAllMateriels = async () => {
       try {
-          const {data} = await axios.get('/api/v1/user/getBonLivraison',  {
+        const {data} = await axios.get('/api/v1/user/getMateriels', {
+          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+        })
+        if(data?.success) {
+          setMateriels(data.materiels)
+        }
+      } catch (error) {
+        console.log(error);
+        message.error('Something went wrong in getting articles')
+      }
+    }
+  const getAllBonLivraisons = async () => {
+      try {
+          const {data} = await axios.get('/api/v1/user/getBonLivraisons',  {
               headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}
           })
           if(data?.success) {
-            setBonLivraison(data.bonLivraison)
+            setBonLivraisons(data.bonLivraisons)
           }
 
       } catch (error) {
@@ -29,25 +42,43 @@ const BonLivraison = () => {
           message.error('Something went wrong in getting  bon livraison')
       }
   }
+  
   useEffect(() => {
-      getAllLivraisons()
+    getAllBonLivraisons()
+      getAllMateriels()
   }, [])
   const handleSubmit = async (e) => {
     e.preventDefault()
-    try {
+      try {
+        // const selectedMaterielObj = materiels.find((materiel) => materiel.nomMateriel === selectedMateriel)
         const {data} = await axios.post('/api/v1/user/ajouterBonLivraison',
-        {date, article, unite, prixUnitaire, quantite, prixTotal},
-        {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}},)
+                { dateEntree, materiel, unite, prixUnitaire, quantite, prixTotal },
+                { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+        )
         if(data?.success) {
-            getAllLivraisons()
-            message.success(`${article} is created`)
+          getAllBonLivraisons();
+          message.success(`${materiel} is created`);
         } else {
-            message.error(data.message)
+          message.error(data.message);
         }
-    } catch (error) {
+      } catch (error) {
         console.log(error);
-        message.error('Something went wrong in input form')
-    }
+        message.error('Something went wrong in input form');
+      }
+//     try {
+//         const {data} = await axios.post('/api/v1/user/ajouterBonLivraison',
+//         {dateEntree, article, unite, prixUnitaire, quantite, prixTotal},
+//         {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}},)
+//         if(data?.success) {
+//             getAllLivraisons()
+//             message.success(`${article} is created`)
+//         } else {
+//             message.error(data.message)
+//         }
+//     } catch (error) {
+//         console.log(error);
+//         message.error('Something went wrong in input form')
+//     }
 }
 
 const calculatePrixTotal = () => {
@@ -70,8 +101,16 @@ useEffect(() => {
     <Layout>
       <form style={{ display: 'flex', justifyContent: 'space-evenly' }} onSubmit={handleSubmit}>
         {/* Champs du formulaire */}
-        <input type="date" placeholder="Date" value={date} onChange={(e) => setDate(e.target.value)} />
-        <input type="text" placeholder="Article" value={article} onChange={(e) => setArticle(e.target.value)} />
+        <input type="date" placeholder="Date" value={dateEntree} onChange={(e) => setDateEntree(e.target.value)} />
+        {/* <input type="text" placeholder="Article" value={article} onChange={(e) => setArticle(e.target.value)} /> */}
+        <Select placeholder="Selectionner un materiel" size="large" showSearch 
+        onChange={(value) => setMateriel(value)}>
+          {materiels.map((materiel) => (
+            <Option key={materiel._id} value={materiel._id}>
+              {materiel.nomMateriel}
+            </Option>
+          ))}
+        </Select>
         <Select placeholder="Selectionner une unitée" size="large"
             showSearch className="form-select mb-3" onChange={(value) => {setUnite(value)}}>
                 <Option value="Unité">Unité</Option>
@@ -80,7 +119,7 @@ useEffect(() => {
                 <Option value="Kg">Kg</Option>
                 <Option value="Paquet">Paquet</Option>
                 <Option value="Boite">Boite</Option>
-            </Select>
+        </Select>
         <input type="number" placeholder="Prix Unitaire" value={prixUnitaire} onChange={(e) => setPrixUnitaire(e.target.value)} />
         <input type="number" placeholder="Quantité" value={quantite} onChange={(e) => setQuantite(e.target.value)} />
         <input type="number" placeholder="Prix Total" value={prixTotal} disabled />
@@ -102,11 +141,11 @@ useEffect(() => {
                     </tr>
                 </thead>
                 <tbody>
-                    {bonLivraison.map((bonLivraison) => (
+                    {bonLivraisons.map((bonLivraison) => (
                         <tr key={bonLivraison._id}>
                             <td>{bonLivraison.code}</td>
-                            <td>{format(new Date(bonLivraison.date), 'dd/MM/yyyy')}</td>
-                            <td>{bonLivraison.article}</td>
+                            <td>{format(new Date(bonLivraison.dateEntree), 'dd/MM/yyyy')}</td>
+                            <td>{bonLivraison.nomMateriel}</td>
                             <td>{bonLivraison.unite}</td>
                             <td>{bonLivraison.prixUnitaire}</td>
                             <td>{bonLivraison.quantite}</td>
@@ -124,49 +163,4 @@ useEffect(() => {
   )
 }
 
-export default BonLivraison
-
-    // <Layout>
-    //     <form style={{display:"flex", justifyContent:'space-evenly'}}>
-    //         <input type='date'/>
-    //         <Select placeholder="Selectionner le nom d'article" size="large" showSearch 
-    //             className="form-select mb-3"  onChange={handleChange}>
-    //             {materiels.map((type) => (
-    //                 <Option key={type._id} value={type._id}>{type.nomMateriel}</Option>
-    //             ))}
-    //         </Select>
-    //         <Select placeholder="Selectionner une unitée" size="large"
-    //             showSearch className="form-select mb-3" onChange={(value) => {setUnite(value)}}>
-    //             <Option value="Unité">Unité</Option>
-    //             <Option value="Litre">Litre</Option>
-    //             <Option value="Sachet">Sachet</Option>
-    //             <Option value="Kg">Kg</Option>
-    //             <Option value="Paquet">Paquet</Option>
-    //             <Option value="Boite">Boite</Option>
-    //         </Select>
-    //         <input type="number" placeholder="Saisir le prix unitaire" />
-    //         <input type="number" placeholder="Saisir la quantité" />
-    //         <input type="number" placeholder="Saisir le prix total" />
-    //         <button type='submit' className="btn btn-success">Ajouter</button>
-    //     </form>
-    //     <table className="table table-striped" style={{border:"2px solid"}}>
-    //         <thead>
-    //             <tr>
-    //                 <th>Code</th>
-    //                 <th>Date</th>
-    //                 <th>Désignation</th>
-    //                 <th>Unité</th>
-    //                 <th>Prix Unitaire</th>
-    //                 <th>Quantité</th>
-    //                 <th>Prix Total</th>
-    //             </tr>
-    //         </thead>
-    //         <tbody>
-    //             {selectedMateriel && (
-    //                 <tr>
-    //                     <td>{}</td>
-    //                 </tr>
-    //             )}
-    //         </tbody>
-    //     </table>
-    // </Layout>
+export default BonLivraisons
