@@ -70,7 +70,7 @@ const TypeMateriels = () => {
             <TypeMaterielForm handleSubmit={handleSubmit}
              value={nomTypeMateriel} setValue={setNomTypeMateriel} />
         </div>
-        <div className=''>
+        <div id='content'>
             <table className="table table-striped">
                 <thead>
                     <tr>

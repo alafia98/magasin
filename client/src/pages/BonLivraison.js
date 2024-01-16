@@ -6,7 +6,7 @@ import { format } from 'date-fns';
 const {Option} = Select;
 
 const BonLivraisons = () => {
-  const [materiels, setMateriels] = useState([])
+  // const [materiels, setMateriels] = useState([])
   const [bonLivraisons, setBonLivraisons] = useState([])
   const [dateEntree, setDateEntree] = useState("")
   const [materiel, setMateriel] = useState("")
@@ -15,19 +15,19 @@ const BonLivraisons = () => {
   const [quantite, setQuantite] = useState('');
   const [prixTotal, setPrixTotal] = useState(''); 
 
-    const getAllMateriels = async () => {
-      try {
-        const {data} = await axios.get('/api/v1/user/getMateriels', {
-          headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-        })
-        if(data?.success) {
-          setMateriels(data.materiels)
-        }
-      } catch (error) {
-        console.log(error);
-        message.error('Something went wrong in getting articles')
-      }
-    }
+    // const getAllMateriels = async () => {
+    //   try {
+    //     const {data} = await axios.get('/api/v1/user/getMateriels', {
+    //       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+    //     })
+    //     if(data?.success) {
+    //       setMateriels(data.materiels)
+    //     }
+    //   } catch (error) {
+    //     console.log(error);
+    //     message.error('Something went wrong in getting articles')
+    //   }
+    // }
   const getAllBonLivraisons = async () => {
       try {
           const {data} = await axios.get('/api/v1/user/getBonLivraisons',  {
@@ -45,12 +45,11 @@ const BonLivraisons = () => {
   
   useEffect(() => {
     getAllBonLivraisons()
-      getAllMateriels()
+      // getAllMateriels()
   }, [])
   const handleSubmit = async (e) => {
     e.preventDefault()
       try {
-        // const selectedMaterielObj = materiels.find((materiel) => materiel.nomMateriel === selectedMateriel)
         const {data} = await axios.post('/api/v1/user/ajouterBonLivraison',
                 { dateEntree, materiel, unite, prixUnitaire, quantite, prixTotal },
                 { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
@@ -65,32 +64,17 @@ const BonLivraisons = () => {
         console.log(error);
         message.error('Something went wrong in input form');
       }
-//     try {
-//         const {data} = await axios.post('/api/v1/user/ajouterBonLivraison',
-//         {dateEntree, article, unite, prixUnitaire, quantite, prixTotal},
-//         {headers: {Authorization: `Bearer ${localStorage.getItem('token')}`}},)
-//         if(data?.success) {
-//             getAllLivraisons()
-//             message.success(`${article} is created`)
-//         } else {
-//             message.error(data.message)
-//         }
-//     } catch (error) {
-//         console.log(error);
-//         message.error('Something went wrong in input form')
-//     }
 }
 
 const calculatePrixTotal = () => {
   const prixUnitaireNumber = parseFloat(prixUnitaire);
   const quantiteNumber = parseFloat(quantite);
 
-  // Vérifiez si les valeurs sont des nombres valides
   if (!isNaN(prixUnitaireNumber) && !isNaN(quantiteNumber)) {
     const total = prixUnitaireNumber * quantiteNumber;
-    setPrixTotal(total.toFixed(2)); // Fixez le nombre de décimales selon vos besoins
+    setPrixTotal(total.toFixed(2));
   } else {
-    setPrixTotal(''); // Réinitialisez le prix total si les valeurs ne sont pas valides
+    setPrixTotal(''); 
   }
 };
 useEffect(() => {
@@ -102,15 +86,15 @@ useEffect(() => {
       <form style={{ display: 'flex', justifyContent: 'space-evenly' }} onSubmit={handleSubmit}>
         {/* Champs du formulaire */}
         <input type="date" placeholder="Date" value={dateEntree} onChange={(e) => setDateEntree(e.target.value)} />
-        {/* <input type="text" placeholder="Article" value={article} onChange={(e) => setArticle(e.target.value)} /> */}
-        <Select placeholder="Selectionner un materiel" size="large" showSearch 
+        {/* <Select placeholder="Selectionner un materiel" size="large" showSearch 
         onChange={(value) => setMateriel(value)}>
           {materiels.map((materiel) => (
             <Option key={materiel._id} value={materiel._id}>
               {materiel.nomMateriel}
             </Option>
           ))}
-        </Select>
+        </Select> */}
+        <input type="text" placeholder="Materiel" value={materiel} onChange={(e) => setMateriel(e.target.value)} />
         <Select placeholder="Selectionner une unitée" size="large"
             showSearch className="form-select mb-3" onChange={(value) => {setUnite(value)}}>
                 <Option value="Unité">Unité</Option>
@@ -126,7 +110,7 @@ useEffect(() => {
         <button type="submit" className="btn btn-success">Ajouter</button>
       </form>
       
-      <div className=''>
+      <div id="content" className=''>
             <table className="table table-striped">
                 <thead>
                     <tr>
@@ -145,7 +129,7 @@ useEffect(() => {
                         <tr key={bonLivraison._id}>
                             <td>{bonLivraison.code}</td>
                             <td>{format(new Date(bonLivraison.dateEntree), 'dd/MM/yyyy')}</td>
-                            <td>{bonLivraison.nomMateriel}</td>
+                            <td>{bonLivraison.materiel}</td>
                             <td>{bonLivraison.unite}</td>
                             <td>{bonLivraison.prixUnitaire}</td>
                             <td>{bonLivraison.quantite}</td>
@@ -157,7 +141,7 @@ useEffect(() => {
                     ))}
                 </tbody>
             </table>
-        </div>
+      </div>
     </Layout>
 
   )

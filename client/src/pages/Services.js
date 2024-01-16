@@ -39,7 +39,7 @@ const Services = () => {
         <Link to='/ajouterService'>
             <Button type="primary">Ajouter nouvelle Société</Button>
         </Link>
-        <Table columns={columns} dataSource={services}></Table>
+        <Table id='content' columns={columns} dataSource={services}></Table>
     </Layout>
   )
 }

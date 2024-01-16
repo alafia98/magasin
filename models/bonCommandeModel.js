@@ -1,13 +1,13 @@
 const mongoose = require('mongoose')
-// const AutoIncrement = require('mongoose-sequence')(mongoose)
 
 const bonCommandeSchema = new mongoose.Schema({
-    dateSortie: {type: Date, default: Date.now},
-    article: {type: String,required: true,},
-    unite: {type: String,required: true,},
-    quantiteDemandee: {type: Number,required: true},
-    quantiteLivre: {type: Number, required:true},
+    dateSortie: {type: Date, required:true},
+    // materiel: {type: String,lowercase: true,},
+    materiel: {type: String,required: true,},
+    unite: {type: String,required: true},
+    qteDemandee: {type: Number,required: true},
+    qteLivree: {type: Number, required:true},
 })
 
-const BonCommande = mongoose.model('bonCommande', bonCommandeSchema)
-module.exports = BonCommande
+const BonCommandeModel = mongoose.model('bonCommande', bonCommandeSchema)
+module.exports = BonCommandeModel

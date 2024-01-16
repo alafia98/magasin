@@ -1,11 +1,30 @@
+
+
 import React, { useEffect, useState } from 'react'
 import Layout from './../components/Layout';
 import { Select, message } from 'antd';
 import axios from 'axios';
 import { format } from 'date-fns';
+import { Link } from 'react-router-dom';
 const {Option} = Select
 
 const MainCourante = () => {
+    const [quantities, setQuantities] = useState(Array.from({ length: 31 }, () => ({ entry: 0, exit: 0 })));
+
+    const handleDayClick = (day) => {
+        // Prompt the user to enter the quantity for the selected day
+        const entryQuantity = prompt(`Enter quantity for day ${day} (Entry):`);
+        const exitQuantity = prompt(`Enter quantity for day ${day} (Exit):`);
+
+        // Update the quantities state with the entered values
+        setQuantities((prevQuantities) => {
+            const newQuantities = [...prevQuantities];
+            newQuantities[day - 1] = { entry: entryQuantity || 0, exit: exitQuantity || 0 };
+            return newQuantities;
+        });
+    };
+
+
     const [bonLivraisons, setBonLivraisons] = useState([])
     const [bonLivraison, setBonLivraison] = useState('')
     const [entries, setEntries] = useState([])
@@ -53,7 +72,7 @@ const MainCourante = () => {
             <button type="submit" className="btn btn-success">Chercher</button>
         </form>
         {entries.length>0 && (
-        <div className="text-center" style={{ paddingTop: '20px' }}>
+        <div id="content" className="text-center" style={{ paddingTop: '20px' }}>
           <h2>{entries[0].materiel}</h2>
             <table className="table table-striped" style={{border:"2px solid"}}>
                 <thead>
@@ -78,13 +97,19 @@ const MainCourante = () => {
                     </tr>
                 </thead>
                 <tbody>
-                   {entries.map((entry, index) => (
-                    <tr key={index}>
-                        <td></td>
-                        <td>{format(new Date(entry.dateEntree), 'dd/MM/yyyy')}</td>
-                        <td>{entry.quantite}</td>
-                    </tr>
-                   ))}
+                {Array.from({ length: 31 }, (_, index) => (
+                            <tr key={index+1}>
+                                <td>obs</td>
+                                <td><button type="submit" style={{border:'none'}} onClick={() => handleDayClick(index + 1)}>{index+1}</button></td>
+                                {Array.from({ length: 12 }, (_, index) => (
+                                    <React.Fragment key={index}>
+                                        <td>{quantities[index].entry}</td>
+                                        <td>{quantities[index].exit}</td>
+                                    </React.Fragment>
+                                ))}
+                            </tr>
+                            
+                ))}
                 </tbody>
                 <tfooter>
                     <tr>
@@ -124,3 +149,16 @@ const MainCourante = () => {
 }
 
 export default MainCourante
+
+                   {/* {entries.map((entry, index) => (
+                    <tr key={index}>
+                        <td></td>
+                        {Array.from({ length: 31 }, (_, index) => (
+                            <tr key={index+1}>
+                                <td><button type="submit">{index+1}</button></td>
+                            </tr>
+                            ))}
+                        <td>{format(new Date(entry.dateEntree), 'dd/MM/yyyy')}</td>
+                        <td>{entry.quantite}</td>
+                    </tr>
+                   ))} */}

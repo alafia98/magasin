@@ -12,6 +12,7 @@ const Materiels = () => {
     const [model, setModel] = useState("")
     const [serie, setSerie] = useState("")
     const [reference, setReference] = useState("")
+
     const [visible, setVisible] = useState(false)
     const [selected, setSelected] = useState(null)
     const [updatedNomMateriel, setUpdatedNomMateriel] = useState("")
@@ -21,6 +22,7 @@ const Materiels = () => {
     const [updatedReference, setUpdatedReference] = useState("")
     const [updatedUnite, setUpdatedUnite] = useState("")
     const [unite, setUnite] = useState("")
+
 
     const getAllTypeMateriels = async () => {
         try {
@@ -133,7 +135,7 @@ const Materiels = () => {
                 <button className="btn btn-success" onClick={handleSubmit}>Ajouter</button>
             </div>
         </div>
-        <div className=''>
+        <div id="content">
             <table className="table table-striped">
                 <thead>
                     <tr>

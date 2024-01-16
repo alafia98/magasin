@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useRef, useEffect } from 'react'
 import "../styles/LayoutStyles.css"
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import {AdminMenu} from './../Data/data';
@@ -9,6 +9,10 @@ const Layout = ({children}) => {
     const {user} = useSelector((state) => state.user)
     const location = useLocation()
     const navigate = useNavigate()
+    const contentRef = useRef();
+    useEffect(() => {
+        contentRef.current = document.getElementById('content');
+    }, []);
 
     // logout function
     const handleLogout = () => {
@@ -16,6 +20,21 @@ const Layout = ({children}) => {
         message.success('Logout Successfully')
         navigate('/login')
     }
+    const handlePrint = () => {
+        const contentToPrint = contentRef.current?.innerHTML;
+        if (contentToPrint) {
+            const printWindow = window.open('', '_blank');
+            printWindow.document.write('<html><head><title>Imprimer</title></head><body>');
+            printWindow.document.write(contentToPrint);
+            printWindow.document.write('</body></html>');
+            printWindow.document.close();
+            printWindow.print();
+            printWindow.onafterprint = () => printWindow.close();
+        } else {
+            console.error("Le contenu à imprimer est vide ou introuvable.");
+        }
+    };
+
 
   return (
     <>
@@ -36,6 +55,9 @@ const Layout = ({children}) => {
                                 </>
                             )
                         })}
+                        <div className='menu-item' onClick={handlePrint}>
+                            <Link to='' >Imprimer</Link>
+                        </div>
                         <div className={`menu-item`} onClick={handleLogout}>
                             <Link to='/login'>Logout</Link>
                         </div>
@@ -46,6 +68,7 @@ const Layout = ({children}) => {
                         <ul className="header-content" >
                             <li><Link to='/bonlivraison'>Bon Livraison</Link></li>
                             <li><Link to='/boncommande'>Bon Commande</Link></li>
+                            <li><Link to='/stock'>Stock</Link></li>
                             <li><Link to='/maincourante'>Main Courante</Link></li>
                             <li><Link to='/inventaire'>Inventaire</Link>
                                 <ul style={{width:"20vw"}}>

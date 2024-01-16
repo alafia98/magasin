@@ -9,6 +9,7 @@ const typeMaterielModel = require('../models/typematerielModel')
 const slugify = require('slugify')
 const bonLivraisonModel = require('../models/bonLivraisonModel')
 const mainCouranteModel = require('../models/maincouranteModel')
+const BonCommandeModel = require('../models/bonCommandeModel')
 
 // register callback
 const registerController = async (req, res) => {
@@ -86,14 +87,6 @@ const ajouterTypeMaterielController = async (req, res) => {
         console.log(error);
         res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
     }
-    // try {
-    //     const newTypeMateriel = await typeMaterielModel({...req.body})
-    //     await newTypeMateriel.save()
-    //     res.status(201).send({success:true, message: "Type materiel added successfully"})
-    // } catch (error) {
-    //     console.log(error);
-    //     res.status(500).send({success:false, error, message:"Error While Applying For Doctor"})
-    // }
 }
 // materiel
 const getMaterielsController = async (req, res) => {
@@ -126,6 +119,32 @@ const ajouterMaterielController = async (req, res) => {
 
 }
 
+// main courante
+const getMainCourantesController = async (req, res) => {
+    try {
+       const mainCourantes = await mainCouranteModel.find({}).sort({createdAt:-1})
+       res.status(200).send({success:true, message:' main courante data', mainCourantes})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching main courante', error})
+    }
+}
+const ajouterMainCouranteController = async (req, res) => {
+    try {
+        const {materiel} = req.body;
+        const materielObj = await materielModel.findById(materiel)
+        const nomMateriel = materielObj ? materielObj.nomMateriel : null;
+        const mainCourantes = new mainCouranteModel({...req.body, nomMateriel});
+        await mainCourantes.save();
+        res.status(201).send({ success: true, message: 'Materiel Created Successfully', mainCourantes});
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({ success: false, error, message: 'Error in Creating main courantes' });
+    }
+
+}
+
+
 
 // bon livraison
 const getBonLivraisonsController = async (req, res) => {
@@ -150,9 +169,9 @@ const ajouterBonLivraisonController = async (req, res) => {
             case !dateEntree:
                 return res.status(500).send({err: 'date entré is required'})
         }
-        const materielObj = await materielModel.findById(materiel)
-        const nomMateriel = materielObj ? materielObj.nomMateriel : null;
-        const bonLivraisons = new bonLivraisonModel({...req.body, nomMateriel:nomMateriel});
+        // const materielObj = await materielModel.findById(materiel)
+        // const nomMateriel = materielObj ? materielObj.nomMateriel : null;
+        const bonLivraisons = new bonLivraisonModel({...req.body});
         await bonLivraisons.save();
         res.status(201).send({ success: true, message: 'bon livraison Created Successfully', bonLivraisons });
     } catch (error) {
@@ -164,8 +183,8 @@ const ajouterBonLivraisonController = async (req, res) => {
 // bon commande
 const getBonCommandesController = async (req, res) => {
     try {
-       const bonCommandes = await bonLivraisonModel.find({}).sort({createdAt:-1})
-       res.status(200).send({success:true, message:' bon livraison data', bonCommandes})
+       const bonCommandes = await BonCommandeModel.find({}).sort({createdAt:-1})
+       res.status(200).send({success:true, message:' bon commande data', bonCommandes})
     } catch (error) {
         console.log(error);
         res.status(500).send({success:false, message:'Error while fetching bon livraison', error})
@@ -173,39 +192,17 @@ const getBonCommandesController = async (req, res) => {
 }
 const ajouterBonCommandeController = async (req, res) => {
     try {
-        const { materiel, unite, quantite, dateEntree } = req.body;
-        switch (true) {
-            case !materiel:
-                return res.status(500).send({ error: 'Article is required' });
-            case !unite:
-                return res.status(500).send({ error: 'Unité is required' });
-            case !quantite:
-                return res.status(500).send({err: 'Quantité is required'})
-            case !dateEntree:
-                return res.status(500).send({err: 'date entré is required'})
-        }
-        const materielObj = await materielModel.findById(materiel)
-        const nomMateriel = materielObj ? materielObj.nomMateriel : null;
-        const bonCommandes = new bonLivraisonModel({...req.body, nomMateriel:nomMateriel});
+        const { materiel } = req.body;
+        // const materielObj = await materielModel.findById(materiel)
+        // const nomMateriel = materielObj ? materielObj.nomMateriel : null;
+        const bonCommandes = new BonCommandeModel({...req.body});
         await bonCommandes.save();
-        res.status(201).send({ success: true, message: 'bon livraison Created Successfully', bonLivraisons });
+        res.status(201).send({ success: true, message: 'bon commande Created Successfully', bonCommandes });
     } catch (error) {
         console.log(error);
         res.status(500).send({ success: false, error, message: 'Error in Creating Materiel' });
     }
 }
-
-// main courante
-const getMainCouranteController = async (req, res) => {
-    try {
-       const mainCourante = await mainCouranteModel.find({}).sort({createdAt:-1})
-       res.status(200).send({success:true, message:' main courante data', mainCourante})
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({success:false, message:'Error while fetching main courante', error})
-    }
-}
-
 
 
 const getSocietesController = async (req, res) => {
@@ -260,9 +257,30 @@ const getSourcesAchatController = async (req, res) => {
     }
 }
 
+const getStockController = async (req, res) => {
+    try {
+        const quantites = await bonLivraisonModel.find()
+        const qteLivrees = await BonCommandeModel.find()
+        const stockParMateriel = {}
+        quantites.forEach(quantite => {
+            const {materiel, quantite: quantité} = quantite
+            stockParMateriel[materiel] = (stockParMateriel[materiel] || 0) + quantité;
+        })
+        qteLivrees.forEach(qteLivree => {
+            const {materiel, qteLivree: quantité} = qteLivree
+            stockParMateriel[materiel] = (stockParMateriel[materiel] || 0) - quantité;
+        })
+        res.status(200).send({data:stockParMateriel})
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({success:false, message:'Error while fetching stock', error})
+    }
+}
+
 module.exports = { loginController, registerController, authController, getSocietesController,
     getTypeMaterielsController, ajouterTypeMaterielController, getServicesController, getSourcesAchatController,
     getMaterielsController,ajouterSocieteController, ajouterServiceController, ajouterMaterielController, 
-    ajouterBonLivraisonController, getMainCouranteController, getBonLivraisonsController,
-    getBonCommandesController, ajouterBonCommandeController
+    ajouterBonLivraisonController, getMainCourantesController, getBonLivraisonsController,
+    getBonCommandesController, ajouterBonCommandeController, ajouterMainCouranteController,
+    getStockController,
 };

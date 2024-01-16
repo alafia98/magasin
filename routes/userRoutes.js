@@ -1,12 +1,13 @@
 const express = require('express')
+const authMiddleware = require("../middlewares/authMiddleware")
 const {loginController, registerController, authController, getSocietesController,
-    getTypeMaterielsController, getServicesController,
+    getTypeMaterielsController, getServicesController, getMainCourantesController,
     getMaterielsController, ajouterTypeMaterielController, ajouterSocieteController,
     ajouterServiceController,ajouterMaterielController, getBonLivraisonsController,
     ajouterBonLivraisonController,getBonCommandesController, ajouterBonCommandeController,
-    
+    ajouterMainCouranteController, getStockController,
 } = require('../controllers/userCtrl')
-const authMiddleware = require("../middlewares/authMiddleware")
+
 // router project
 const router = express.Router()
 // LOGIN 
@@ -35,6 +36,10 @@ router.post('/ajouterBonLivraison', authMiddleware, ajouterBonLivraisonControlle
 router.get('/getBonCommandes', authMiddleware, getBonCommandesController);
 router.post('/ajouterBonCommande', authMiddleware, ajouterBonCommandeController);
 
+// main commande
+router.get('/getMainCourantes', authMiddleware, getMainCourantesController);
+router.post('/ajouterMainCourante', authMiddleware, ajouterMainCouranteController)
+
 // Service
 router.get('/getServices', authMiddleware, getServicesController);
 router.post('/ajouterService', authMiddleware, ajouterServiceController)
@@ -43,5 +48,8 @@ router.post('/ajouterService', authMiddleware, ajouterServiceController)
 // Societes
 router.get('/getSocietes', authMiddleware, getSocietesController);
 router.post('/ajouterSociete', authMiddleware, ajouterSocieteController)
+
+
+router.get('/stock', authMiddleware, getStockController)
 
 module.exports = router;

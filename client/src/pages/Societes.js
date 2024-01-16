@@ -47,7 +47,7 @@ const Societes = () => {
         <Link to='/ajouterSociete'>
             <Button type="primary">Ajouter nouvelle Société</Button>
         </Link>
-        <Table columns={columns} dataSource={societes}></Table>
+        <Table id='content' columns={columns} dataSource={societes}></Table>
     </Layout>
   )
 }
