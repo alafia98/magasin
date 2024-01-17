@@ -18,7 +18,6 @@ import MainCourante from './pages/MainCourante';
 import BonLivraison from './pages/BonLivraison';
 import BonCommande from './pages/BonCommande';
 import Stock from './pages/Stock';
-import MainCouranteForm from './pages/Form/mainCouranteForm';
 
 function App() {
   const {loading} = useSelector(state => state.alerts)
@@ -100,12 +99,6 @@ function App() {
               <Stock />
             </ProtectedRoute>
           } />
-          <Route path='/mainCouranteForm' element={
-            <ProtectedRoute>
-              <MainCouranteForm />
-            </ProtectedRoute>
-          } />
-
         </Routes>
       )}
       </BrowserRouter>

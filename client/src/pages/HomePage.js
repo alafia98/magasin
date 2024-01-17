@@ -31,23 +31,72 @@ const HomePage = () => {
   return (
     <div>
       <Layout>
-        <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+        <div >
           {/* Card for Material Total */}
-          <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '200px' }}>
-            <h3>Material Total</h3>
-            <p>{materialTotal}</p>
-          </div>
+          <h1 className="text-center">Stock des articles par type</h1>
+          <div style={{ display: 'grid', gridTemplateColumns:'repeat(3, 1fr)', justifyItems:'center'}}>
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Produis d'hygiène</h3>
+              <p>{serviceTotal}</p>
+            </div>
 
-          {/* Card for Service Total */}
-          <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '200px' }}>
-            <h3>Service Total</h3>
-            <p>{serviceTotal}</p>
-          </div>
+            {/* Card for Service Total */}
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Fourniture de bureau</h3>
+              <p>{serviceTotal}</p>
+            </div>
 
-           {/* Card for Service Total */}
-           <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '200px' }}>
-            <h3>Societe Total</h3>
-            <p>{serviceTotal}</p>
+            {/* Card for Service Total */}
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Fourniture d'imprimée</h3>
+              <p>{serviceTotal}</p>
+            </div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Matériel d'informatique</h3>
+              <p>{serviceTotal}</p>
+            </div>
+           
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Plomberie sanitaire</h3>
+              <p>{serviceTotal}</p>
+            </div>
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Eléctricité</h3>
+              <p>{serviceTotal}</p>
+            </div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Menuisier</h3>
+              <p>{serviceTotal}</p>
+            </div>
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Habillement et Linge</h3>
+              <p>{serviceTotal}</p>
+            </div>
+            <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Construction</h3>
+              <p>{serviceTotal}</p>
+            </div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{padding: '20px', margin: '10px', width: '70%' }}></div>
+            <div style={{ border: '1px solid', padding: '20px', margin: '10px', width: '70%' }}>
+            <h3>Matériel médico techniques et Mobilier hospitalier</h3>
+              <p>{serviceTotal}</p>
+                </div>
+                <div style={{ border: '1px solid', padding: '10px', margin: '10px', width: '70%' }}>
+              <h3>Matériel technique et Mobilier de bureau</h3>
+              <p>{serviceTotal}</p>
+            </div>
+                <div style={{ border: '1px solid', padding: '20px', margin: '10px', width: '70%' }}>
+                <h3>Divers</h3>
+              <p>{serviceTotal}</p>
+                </div>
           </div>
         </div>
       </Layout>

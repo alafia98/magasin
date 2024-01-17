@@ -6,7 +6,7 @@ const bonCommandeSchema = new mongoose.Schema({
     materiel: {type: String,required: true,},
     unite: {type: String,required: true},
     qteDemandee: {type: Number,required: true},
-    qteLivree: {type: Number, required:true},
+    qteLivree: {type: Number},
 })
 
 const BonCommandeModel = mongoose.model('bonCommande', bonCommandeSchema)

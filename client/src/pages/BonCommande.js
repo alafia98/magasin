@@ -85,8 +85,8 @@ const BonCommande = () => {
                 <Option value="Paquet">Paquet</Option>
                 <Option value="Boite">Boite</Option>
         </Select>
-        <input type="number" placeholder="Prix Unitaire" value={qteDemandee} onChange={(e) => setQteDemandee(e.target.value)} />
-        <input type="number" placeholder="Quantité" value={qteLivree} onChange={(e) => setQteLivree(e.target.value)} />
+        <input type="number" placeholder="quantité demandé" value={qteDemandee} onChange={(e) => setQteDemandee(e.target.value)} />
+        <input type="number" placeholder="Quantité livré" value={qteLivree} onChange={(e) => setQteLivree(e.target.value)} />
         <button type="submit" className="btn btn-success">Ajouter</button>
       </form>
 
